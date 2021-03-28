@@ -1,4 +1,4 @@
 {
-  "mongoRoute": "mongodb+srv://dblogin:AnLpeMaSYgU0ubRO@cluster0.akosg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "mongoRoute": "mongodb+srv://dblogin:AnLpeMaSYgU0ubRO@cluster0.akosg.mongodb.net/main?retryWrites=true&w=majority",
   "jwtPrivateKey": "xsSd0Ss022lD"
 }

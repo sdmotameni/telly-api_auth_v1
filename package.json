@@ -2,7 +2,7 @@
   "name": "telly-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.21",
     "mongoose": "5.12.2",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "twilio": "3.59.0"
   }
 }
