@@ -6,7 +6,9 @@ const cors = require("cors");
 
 module.exports = function (app) {
   app.enable("trust proxy");
-  app.use(cors());
+  // TODO: Adjust Cors Settings
+  app.options("*", cors());
+  // app.use(cors());
   app.use(helmet());
   app.use(compression());
   app.use(morgan("short"));
