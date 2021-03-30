@@ -23,7 +23,7 @@ module.exports.validateUserUpdate = function (user) {
 };
 
 module.exports.validateLinksUpdate = function (links) {
-  const schema = Joi.array().max(100).required();
+  const schema = Joi.object().max(50).required();
   return schema.validate(links);
 };
 

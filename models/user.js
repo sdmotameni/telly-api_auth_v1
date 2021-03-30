@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   dateCreated: { type: String },
   name: { type: String },
   bio: { type: String },
-  links: { type: Array },
+  links: { type: Object },
 });
 
 userSchema.methods.genAuthToken = function () {
