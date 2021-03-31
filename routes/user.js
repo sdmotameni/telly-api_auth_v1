@@ -44,8 +44,8 @@ router.post("/settings", async (req, res) => {
     return res.status(404).send("No account found for your ID. Logout.");
   // ----------------------------------------------------------------
 
-  if (req.body.email && req.body.email != user.email) {
-    let userWithEmail = await User.findOne({ email: req.body.email });
+  if (req.body.email && req.body.email.trim() != user.email) {
+    let userWithEmail = await User.findOne({ email: req.body.email.trim() });
     if (userWithEmail)
       return res.status(400).send("User already exists with that email.");
   }
