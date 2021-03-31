@@ -37,7 +37,7 @@ router.post("/settings", async (req, res) => {
   // ----------------------------------------------------------------
 
   if (req.body.email) {
-    let userWithEmail = await User.findOne({ email });
+    let userWithEmail = await User.findOne({ email: req.body.email });
     if (userWithEmail)
       return res.status(400).send("User already exists with that email.");
   }
