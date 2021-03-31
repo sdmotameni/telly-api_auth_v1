@@ -9,6 +9,17 @@ const {
 } = require("../utils/validation");
 const { handlePassword } = require("../utils/handlePassword");
 
+router.get("/me", async (req, res) => {
+  if (!req._id)
+    return res.status(401).send("You are not authenticated. Login.");
+
+  let user = await User.findById(req._id).select("-password");
+  if (!user)
+    return res.status(404).send("No account found for your ID. Logout.");
+
+  res.send(user);
+});
+
 router.post("/settings", async (req, res) => {
   const { error } = validateUserUpdate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
