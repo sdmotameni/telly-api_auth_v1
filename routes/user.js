@@ -23,6 +23,14 @@ router.get("/me", async (req, res) => {
 });
 
 router.post("/settings", async (req, res) => {
+  Object.keys(req.body).forEach((ele) => {
+    const value = req.body[ele].trim();
+
+    if (!value) {
+      delete req.body[ele];
+    }
+  });
+
   const { error } = validateUserUpdate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -52,7 +60,7 @@ router.post("/settings", async (req, res) => {
   });
 
   await user.save();
-  res.send(user);
+  res.send("Updated");
 });
 
 router.post("/links", async (req, res) => {
@@ -72,7 +80,7 @@ router.post("/links", async (req, res) => {
   user.links = req.body;
 
   await user.save();
-  res.send(user);
+  res.send("Updated");
 });
 
 module.exports = router;
