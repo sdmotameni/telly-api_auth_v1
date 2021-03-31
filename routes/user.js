@@ -13,7 +13,9 @@ router.get("/me", async (req, res) => {
   if (!req._id)
     return res.status(401).send("You are not authenticated. Login.");
 
-  let user = await User.findById(req._id).select("-password");
+  let user = await User.findById(req._id).select(
+    "-password -_id -dateCreated -__v"
+  );
   if (!user)
     return res.status(404).send("No account found for your ID. Logout.");
 
