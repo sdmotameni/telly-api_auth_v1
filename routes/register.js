@@ -6,12 +6,16 @@ const { User } = require("../models/user");
 const { validateReg } = require("../utils/validation");
 const { genDate } = require("../utils/genDate");
 const { handlePassword } = require("../utils/handlePassword");
+const { trimObject } = require("../utils/trimObject");
 
 router.post("/", async (req, res) => {
+  req.body = trimObject(req.body);
+
   const { error } = validateReg(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const { email, password: plainPassword, name, phone, profileId } = req.body;
+
   let user = await User.findOne({ email });
   if (user) return res.status(400).send("User already exists with that email.");
 

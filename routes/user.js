@@ -1,6 +1,7 @@
 // ENDPOINT: /user
 const express = require("express");
 const router = express.Router();
+const _ = require("lodash");
 
 const { User } = require("../models/user");
 const {
@@ -8,45 +9,24 @@ const {
   validateLinksUpdate,
 } = require("../utils/validation");
 const { handlePassword } = require("../utils/handlePassword");
+const { trimObject } = require("../utils/trimObject");
 
 router.get("/me", async (req, res) => {
-  if (!req._id)
-    return res.status(401).send("You are not authenticated. Login.");
-
-  let user = await User.findById(req._id).select(
-    "-password -_id -dateCreated -__v -profileId"
-  );
-  if (!user)
-    return res.status(404).send("No account found for your ID. Logout.");
-
+  let user = req.user;
+  user = _.pick(user, ["phone", "profileId", "name", "bio", "links", "email"]);
   res.send(user);
 });
 
 router.post("/settings", async (req, res) => {
-  Object.keys(req.body).forEach((ele) => {
-    const value = req.body[ele].trim();
-
-    if (!value) {
-      delete req.body[ele];
-    }
-  });
+  req.body = trimObject(req.body);
+  let user = req.user;
 
   const { error } = validateUserUpdate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // ----------------------------------------------------------------
-  // FIXME: Duplicate logic
-  if (!req._id)
-    return res.status(401).send("You are not authenticated. Login.");
-
-  let user = await User.findById(req._id).select("-password");
-  if (!user)
-    return res.status(404).send("No account found for your ID. Logout.");
-  // ----------------------------------------------------------------
-
-  if (req.body.email && req.body.email.trim() != user.email) {
-    let userWithEmail = await User.findOne({ email: req.body.email.trim() });
-    if (userWithEmail)
+  if (req.body.email && req.body.email != user.email) {
+    let emailCheck = await User.findOne({ email: req.body.email });
+    if (emailCheck)
       return res.status(400).send("User already exists with that email.");
   }
 
@@ -60,27 +40,20 @@ router.post("/settings", async (req, res) => {
   });
 
   await user.save();
-  res.send("Updated");
+  res.send("Updated settings.");
 });
 
 router.post("/links", async (req, res) => {
+  req.body = trimObject(req.body);
+  let user = req.user;
+
   const { error } = validateLinksUpdate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
-  // ----------------------------------------------------------------
-  // FIXME: Duplicate logic
-  if (!req._id)
-    return res.status(401).send("You are not authenticated. Login.");
-
-  let user = await User.findById(req._id).select("-password");
-  if (!user)
-    return res.status(404).send("No account found for your ID. Logout.");
-  // ----------------------------------------------------------------
 
   user.links = req.body;
 
   await user.save();
-  res.send("Updated");
+  res.send("Updated links.");
 });
 
 module.exports = router;

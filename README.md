@@ -1,10 +1,21 @@
 # Endpoints
-* Get Profile by ID (GET: /profile/:id - DONE)
 
-* Create User Login (send auth header) (POST: /login - DONE)
+- Get Profile by ID (GET: /profile/:id)
+  \*\* returns user object (properties: phone, profileId, name, bio, links)
 
-* Create User Account (send auth header) (POST: /register - DONE)
+- User Login (POST: /login)
+  \*\* returns only token via header
 
-* Update User Settings (if authenticated) (POST: /user/settings - DONE)
+- Create User Account (POST: /register)
+  \*\* returns only token via header
 
-* Update User Links (if authenticated) (POST: /user/links - DONE)
+##user route has auth middleware
+
+- Get Me (POST: /user/me)
+  \*\* if authenticated & profile found, returns user object (properties: phone, profileId, name, bio, links, email)
+
+- Update User Settings (POST: /user/settings)
+  \*\* if authenticated & profile found, updates given keys and returns nothing
+
+- Update User Links (POST: /user/links)
+  \*\* if authenticated & profile found, replaces entire links object with the new one the client sends (meaning client needs to send old links as well), returns nothing

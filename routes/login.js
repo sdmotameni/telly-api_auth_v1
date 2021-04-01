@@ -6,8 +6,11 @@ const bcrypt = require("bcrypt");
 
 const { User } = require("../models/user");
 const { validateLoginReq } = require("../utils/validation");
+const { trimObject } = require("../utils/trimObject");
 
 router.post("/", async (req, res) => {
+  req.body = trimObject(req.body);
+
   const { error } = validateLoginReq(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
