@@ -1,5 +1,4 @@
 const Sentry = require("@sentry/node");
-const Tracing = require("@sentry/tracing");
 
 module.exports.init = function () {
   Sentry.init({
@@ -16,8 +15,8 @@ module.exports.init = function () {
 
 module.exports.log = function (e) {
   const transaction = Sentry.startTransaction({
-    op: "test",
-    name: "My First Test Transaction",
+    op: "telly-api",
+    name: "telly-api",
   });
   Sentry.captureException(e);
   transaction.finish();
