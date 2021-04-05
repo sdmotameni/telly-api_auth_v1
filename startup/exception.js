@@ -1,8 +1,11 @@
+const errorLogger = require("../utils/errorLogger");
+
 module.exports = function () {
   // uncaughtException (sync errors)
   process.on("uncaughtException", (ex) => {
+    errrorLogger.log(ex);
     console.error("uncaughtException, terminating service...");
-    console.log(ex);
+    console.error(ex);
     setTimeout(() => {
       process.exit(1);
     }, 2000);
@@ -10,8 +13,9 @@ module.exports = function () {
 
   // unhandledRej (async errors)
   process.on("unhandledRejection", (ex) => {
+    errrorLogger.log(ex);
     console.error("unhandledRej, terminating service...");
-    console.log(ex);
+    console.error(ex);
     setTimeout(() => {
       process.exit(1);
     }, 2000);

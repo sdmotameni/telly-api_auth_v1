@@ -10,6 +10,7 @@ const app = express();
 
 require("./startup/exception")();
 require("./startup/db")();
+require("./utils/errorLogger").init();
 require("./startup/prod")(app);
 require("./startup/routes")(app);
 
