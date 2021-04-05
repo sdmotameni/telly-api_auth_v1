@@ -13,8 +13,34 @@ const { trimObject } = require("../utils/trimObject");
 
 router.get("/me", async (req, res) => {
   let user = req.user;
-  user = _.pick(user, ["phone", "profileId", "name", "bio", "links", "email"]);
+  user = _.pick(user, [
+    "photoUrl",
+    "phone",
+    "profileId",
+    "name",
+    "bio",
+    "links",
+    "email",
+  ]);
   res.send(user);
+});
+
+//TODO: Remove:
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "dyusynvjw",
+  api_key: "652182949657319",
+  api_secret: "wJ-A-O6zIEsB8Y5wWYK4xt-fD48",
+});
+
+router.post("/upload", async (req, res) => {
+  // cloudinary.v2.uploader.upload(
+  //   "/Users/sepmotameni/Desktop/photo-api/food.png",
+  //   function (error, result) {
+  //     console.log(result, error);
+  //   }
+  // );
+  res.send(req);
 });
 
 router.post("/settings", async (req, res) => {

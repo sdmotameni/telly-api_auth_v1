@@ -9,7 +9,14 @@ router.get("/:id", async (req, res) => {
   let user = await User.findOne({ profileId: req.params.id });
   if (!user) return res.status(404).send("No profile found at that ID.");
 
-  user = _.pick(user, ["phone", "profileId", "name", "bio", "links"]);
+  user = _.pick(user, [
+    "photoUrl",
+    "phone",
+    "profileId",
+    "name",
+    "bio",
+    "links",
+  ]);
 
   res.send(user);
 });
