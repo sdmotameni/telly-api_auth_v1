@@ -16,7 +16,7 @@ const multer = require("multer");
 const upload = multer({
   dest: "uploads",
   limits: {
-    fileSize: 1000000,
+    fileSize: 1024 * 1024 * 1024,
   },
 });
 
@@ -26,11 +26,9 @@ router.get("/me", async (req, res) => {
   res.send(user);
 });
 
-router.post("/upload", upload.single("image"), async (req, res, err) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
-  if (err.code === "LIMIT_FILE_SIZE")
-    return res.status(400).send("File size too big.");
   if (!req.file.filename) return res.status(400).send("No file attached.");
   if (!req.file.originalname.match(/\.(png|jpg|jpeg)$/))
     return res.status(400).send("Please upload an image.");
