@@ -40,6 +40,7 @@ router.get("/me", async (req, res) => {
   res.send(user);
 });
 
+// TODO: Extract this to clean up code
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
@@ -48,9 +49,13 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     return res.status(400).send("Please upload an image.");
 
   cloudinary.v2.uploader.upload(req.file.path, function (error, result) {
-    if (error) return res.status(400).send("Upload failed");
+    if (error) return res.status(400).send("Upload failed.");
 
-    user.photoUrl = result.url;
+    var splittedUrl = result.url.split("upload");
+
+    var formattedUrl = splittedUrl[0] + "upload/h_200,w_200" + splittedUrl[1];
+
+    user.photoUrl = formattedUrl;
     user
       .save()
       .then(() => {
