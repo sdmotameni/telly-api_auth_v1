@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const fs = require("fs");
+const sharp = require("sharp");
 const { User } = require("../models/user");
 const {
   validateUserUpdate,
@@ -34,8 +35,14 @@ router.get("/me", async (req, res) => {
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
+  if (!req.file.filename) return res.status(400).send("No file selected");
+  const buffer = await sharp(fs.readFileSync("uploads/" + req.file.filename))
+    .resize({ width: 200, height: 200 })
+    .png()
+    .toBuffer();
+
   const img = {
-    data: fs.readFileSync("uploads/" + req.file.filename),
+    data: buffer,
     contentType: "image/png",
   };
 
