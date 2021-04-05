@@ -10,10 +10,7 @@ const userSchema = new mongoose.Schema({
   dateCreated: { type: String },
   name: { type: String },
   bio: { type: String },
-  img: {
-    data: Buffer,
-    contentType: String,
-  },
+  photoUrl: { type: String },
   links: { type: Object },
 });
 

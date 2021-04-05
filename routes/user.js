@@ -2,8 +2,6 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-const fs = require("fs");
-const sharp = require("sharp");
 const { User } = require("../models/user");
 const {
   validateUserUpdate,
@@ -11,6 +9,14 @@ const {
 } = require("../utils/validation");
 const { handlePassword } = require("../utils/handlePassword");
 const { trimObject } = require("../utils/trimObject");
+
+const fs = require("fs");
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "dyusynvjw",
+  api_key: "652182949657319",
+  api_secret: "wJ-A-O6zIEsB8Y5wWYK4xt-fD48",
+});
 
 const multer = require("multer");
 const upload = multer({
@@ -22,33 +28,39 @@ const upload = multer({
 
 router.get("/me", async (req, res) => {
   let user = req.user;
-  user = _.pick(user, ["phone", "profileId", "name", "bio", "links", "email"]);
+  user = _.pick(user, [
+    "photoUrl",
+    "phone",
+    "profileId",
+    "name",
+    "bio",
+    "links",
+    "email",
+  ]);
   res.send(user);
 });
 
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
-  if (!req.file.filename) return res.status(400).send("No file attached.");
+  if (!req.file) return res.status(400).send("No file attached.");
   if (!req.file.originalname.match(/\.(png|jpg|jpeg)$/))
     return res.status(400).send("Please upload an image.");
 
-  const buffer = await sharp(fs.readFileSync("uploads/" + req.file.filename))
-    .resize({ width: 200, height: 200 })
-    .png()
-    .toBuffer();
+  cloudinary.v2.uploader.upload(req.file.path, function (error, result) {
+    if (error) return res.status(400).send("Upload failed");
 
-  const img = {
-    data: buffer,
-    contentType: "image/png",
-  };
-
-  user.img = img;
-
-  user
-    .save()
-    .then(() => res.send("Uploaded Successfully"))
-    .catch(() => res.status(400).send("Upload failed."));
+    user.photoUrl = result.url;
+    user
+      .save()
+      .then(() => {
+        fs.unlinkSync("./" + req.file.path);
+        return res.send("Upload successful.");
+      })
+      .catch(() => {
+        return res.status(400).send("Upload failed.");
+      });
+  });
 });
 
 router.post("/settings", async (req, res) => {
