@@ -18,12 +18,6 @@ const upload = multer({
   limits: {
     fileSize: 1000000,
   },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-      cb(new Error("Please upload an image."));
-    }
-    cb(undefined, true);
-  },
 });
 
 router.get("/me", async (req, res) => {
@@ -35,7 +29,10 @@ router.get("/me", async (req, res) => {
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
-  if (!req.file.filename) return res.status(400).send("No file selected");
+  if (!req.file.filename) return res.status(400).send("No file attached.");
+  if (!req.file.originalname.match(/\.(png|jpg|jpeg)$/))
+    return res.status(400).send("Please upload an image.");
+
   const buffer = await sharp(fs.readFileSync("uploads/" + req.file.filename))
     .resize({ width: 200, height: 200 })
     .png()
