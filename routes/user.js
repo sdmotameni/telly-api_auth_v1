@@ -2,12 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-const cloudinary = require("cloudinary");
-const config = require("config");
 const fs = require("fs");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-
 const { User } = require("../models/user");
 const {
   validateUserUpdate,
@@ -16,33 +11,40 @@ const {
 const { handlePassword } = require("../utils/handlePassword");
 const { trimObject } = require("../utils/trimObject");
 
-cloudinary.config(config.get("cloudinaryConfig"));
+const multer = require("multer");
+const upload = multer({
+  dest: "uploads",
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+      cb(new Error("Please upload an image."));
+    }
+    cb(undefined, true);
+  },
+});
 
 router.get("/me", async (req, res) => {
   let user = req.user;
-  user = _.pick(user, [
-    "photoUrl",
-    "phone",
-    "profileId",
-    "name",
-    "bio",
-    "links",
-    "email",
-  ]);
+  user = _.pick(user, ["phone", "profileId", "name", "bio", "links", "email"]);
   res.send(user);
 });
 
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
-  cloudinary.v2.uploader.upload(req.file.path, function (error, result) {
-    if (error) return res.status(400).send("Upload failed.");
-    user.photoUrl = result.url;
-  });
 
-  fs.rmdirSync("uploads", { recursive: true });
+  const img = {
+    data: fs.readFileSync("uploads/" + req.file.filename),
+    contentType: "image/png",
+  };
 
-  await user.save();
-  res.send("Uploaded successfully.");
+  user.img = img;
+
+  user
+    .save()
+    .then(() => res.send("Uploaded Successfully"))
+    .catch(() => res.status(400).send("Upload failed."));
 });
 
 router.post("/settings", async (req, res) => {

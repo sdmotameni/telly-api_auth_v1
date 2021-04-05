@@ -1,7 +1,6 @@
 // ENDPOINT: /register
 const express = require("express");
 const router = express.Router();
-
 const { User } = require("../models/user");
 const { validateReg } = require("../utils/validation");
 const { genDate } = require("../utils/genDate");

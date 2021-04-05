@@ -1,9 +1,7 @@
 // ENDPOINT: /login
 const express = require("express");
 const router = express.Router();
-
 const bcrypt = require("bcrypt");
-
 const { User } = require("../models/user");
 const { validateLoginReq } = require("../utils/validation");
 const { trimObject } = require("../utils/trimObject");
