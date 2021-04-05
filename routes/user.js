@@ -40,7 +40,7 @@ router.post("/upload", async (req, res) => {
   //     console.log(result, error);
   //   }
   // );
-  res.send(req);
+  res.send("uploaded");
 });
 
 router.post("/settings", async (req, res) => {
