@@ -3,10 +3,9 @@ const config = require("config");
 const { User } = require("../models/user");
 
 module.exports = async function (req, res, next) {
-  const token = req.header("x-auth-token");
-  if (!token) return next();
-
   try {
+    const token = req.header("x-auth-token");
+
     const decodedId = jwt.verify(token, config.get("jwtPrivateKey"));
 
     let user = await User.findById(decodedId);

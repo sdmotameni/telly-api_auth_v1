@@ -1,4 +1,9 @@
 {
   "mongoRoute": "mongodb+srv://dblogin:AnLpeMaSYgU0ubRO@cluster0.akosg.mongodb.net/main?retryWrites=true&w=majority",
-  "jwtPrivateKey": "xsSd0Ss022lD"
+  "jwtPrivateKey": "xsSd0Ss022lD",
+  "cloudinaryConfig": {
+    "cloud_name": "dyusynvjw",
+    "api_key": "652182949657319",
+    "api_secret": "wJ-A-O6zIEsB8Y5wWYK4xt-fD48"
+  }
 }

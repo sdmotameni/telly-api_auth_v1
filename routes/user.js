@@ -2,6 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const cloudinary = require("cloudinary");
+const config = require("config");
+const fs = require("fs");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const { User } = require("../models/user");
 const {
@@ -10,6 +15,8 @@ const {
 } = require("../utils/validation");
 const { handlePassword } = require("../utils/handlePassword");
 const { trimObject } = require("../utils/trimObject");
+
+cloudinary.config(config.get("cloudinaryConfig"));
 
 router.get("/me", async (req, res) => {
   let user = req.user;
@@ -25,22 +32,17 @@ router.get("/me", async (req, res) => {
   res.send(user);
 });
 
-//TODO: Remove:
-const cloudinary = require("cloudinary");
-cloudinary.config({
-  cloud_name: "dyusynvjw",
-  api_key: "652182949657319",
-  api_secret: "wJ-A-O6zIEsB8Y5wWYK4xt-fD48",
-});
+router.post("/upload", upload.single("image"), async (req, res) => {
+  let user = req.user;
+  cloudinary.v2.uploader.upload(req.file.path, function (error, result) {
+    if (error) return res.status(400).send("Upload failed.");
+    user.photoUrl = result.url;
+  });
 
-router.post("/upload", async (req, res) => {
-  // cloudinary.v2.uploader.upload(
-  //   "/Users/sepmotameni/Desktop/photo-api/food.png",
-  //   function (error, result) {
-  //     console.log(result, error);
-  //   }
-  // );
-  res.send("uploaded");
+  fs.rmdirSync("uploads", { recursive: true });
+
+  await user.save();
+  res.send("Uploaded successfully.");
 });
 
 router.post("/settings", async (req, res) => {
