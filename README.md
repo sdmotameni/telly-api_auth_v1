@@ -9,7 +9,7 @@
 - Create User Account (POST: /register)
   \*\* returns only token via header
 
-##user route has auth middleware
+# user route has auth middleware
 
 - Get Me (POST: /user/me)
   \*\* if authenticated & profile found, returns user object (properties: photoUrl, phone, profileId, name, bio, links, email)
