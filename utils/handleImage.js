@@ -15,7 +15,9 @@ module.exports.handleImage = function (imagePath, user, res) {
         height: 200,
         gravity: "face",
         crop: "thumb",
+        version: result.version,
       });
+
       user
         .save()
         .then(() => {
