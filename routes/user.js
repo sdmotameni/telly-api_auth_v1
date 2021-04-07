@@ -9,20 +9,13 @@ const {
 } = require("../utils/validation");
 const { handlePassword } = require("../utils/handlePassword");
 const { trimObject } = require("../utils/trimObject");
-
-const fs = require("fs");
-const cloudinary = require("cloudinary");
-cloudinary.config({
-  cloud_name: "dyusynvjw",
-  api_key: "652182949657319",
-  api_secret: "wJ-A-O6zIEsB8Y5wWYK4xt-fD48",
-});
+const { handleImage } = require("../utils/handleImage");
 
 const multer = require("multer");
 const upload = multer({
   dest: "uploads",
   limits: {
-    fileSize: 3000000,
+    fileSize: 5000000,
   },
 });
 
@@ -40,7 +33,6 @@ router.get("/me", async (req, res) => {
   res.send(user);
 });
 
-// TODO: Extract this to clean up code
 router.post("/upload", upload.single("image"), async (req, res) => {
   let user = req.user;
 
@@ -48,24 +40,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   if (!req.file.originalname.match(/\.(png|jpg|jpeg)$/))
     return res.status(400).send("Please upload an image.");
 
-  cloudinary.v2.uploader.upload(req.file.path, function (error, result) {
-    if (error) return res.status(400).send("Upload failed.");
-
-    var splittedUrl = result.url.split("upload");
-
-    var formattedUrl = splittedUrl[0] + "upload/h_200,w_200" + splittedUrl[1];
-
-    user.photoUrl = formattedUrl;
-    user
-      .save()
-      .then(() => {
-        fs.unlinkSync("./" + req.file.path);
-        return res.send("Upload successful.");
-      })
-      .catch(() => {
-        return res.status(400).send("Upload failed.");
-      });
-  });
+  handleImage(req.file.path, user, res);
 });
 
 router.post("/settings", async (req, res) => {

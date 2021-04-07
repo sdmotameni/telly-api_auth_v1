@@ -9,7 +9,7 @@
 - Create User Account (POST: /register)
   \*\* returns only token via header
 
-# user route has auth middleware
+### user route has auth middleware
 
 - Get Me (POST: /user/me)
   \*\* if authenticated & profile found, returns user object (properties: photoUrl, phone, profileId, name, bio, links, email)
@@ -21,4 +21,4 @@
   \*\* if authenticated & profile found, replaces entire links object with the new one the client sends (meaning client needs to send old links as well), returns nothing
 
 - Update User Profile Picture (POST: /user/upload)
-  \*\* if authenticated & profile found, uploads image, processes via mutler, and uploads to cloudinary and returns nothing, sets photoUrl key for user object
+  \*\* if authenticated & profile found, uploads image, processes via mutler, and uploads to cloudinary and returns 200 OK, sets photoUrl key for user object
