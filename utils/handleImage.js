@@ -13,7 +13,6 @@ module.exports.handleImage = function (imagePath, user, res) {
       user.photoUrl = cloudinary.url("profile/" + user.profileId, {
         width: 200,
         height: 200,
-        gravity: "face",
         crop: "thumb",
         version: result.version,
       });
