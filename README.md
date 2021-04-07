@@ -22,3 +22,9 @@
 
 - Update User Profile Picture (POST: /user/upload)
   \*\* if authenticated & profile found, uploads image, processes via mutler, and uploads to cloudinary and returns 200 OK, sets photoUrl key for user object
+
+### admin route has auth middleware (only if req.user.email me@sepmotameni.com can access)
+
+\*\* Get all users (GET: /admin)
+
+\*\* Get user by ID (GET: /admin/:id)
