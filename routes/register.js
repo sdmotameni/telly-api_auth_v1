@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
 
   let photoUrl =
     "https://res.cloudinary.com/dyusynvjw/image/upload/v1618083102/avatar.png";
-  let links = {};
 
   user = new User({
     profileId,
@@ -36,7 +35,6 @@ router.post("/", async (req, res) => {
     name,
     phone,
     photoUrl,
-    links,
     dateCreated,
   });
 
