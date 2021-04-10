@@ -25,7 +25,20 @@ router.post("/", async (req, res) => {
 
   const dateCreated = genDate();
 
-  user = new User({ profileId, email, password, name, phone, dateCreated });
+  let photoUrl =
+    "https://res.cloudinary.com/dyusynvjw/image/upload/v1618083102/avatar.png";
+  let links = {};
+
+  user = new User({
+    profileId,
+    email,
+    password,
+    name,
+    phone,
+    photoUrl,
+    links,
+    dateCreated,
+  });
 
   await user.save();
   const token = user.genAuthToken();
