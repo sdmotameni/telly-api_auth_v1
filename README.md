@@ -3,6 +3,9 @@
 - Get Profile by ID (GET: /profile/:id)
   \*\* returns user object (properties: photoUrl, phone, profileId, name, bio, links)
 
+- Get VCard by ID (GET: /profile/:id/vcard)
+  \*\* returns vcard file for that ID (if found)
+
 - User Login (POST: /login)
   \*\* returns only token via header
 
