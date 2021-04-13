@@ -35,7 +35,7 @@ router.get("/:id/vcard", async (req, res) => {
   card.firstName = formattedName && formattedName[0];
   card.lastName = formattedName && formattedName[1];
   card.organization = user.bio;
-  card.phone = user.phone;
+  card.workPhone = user.phone;
   card.url = `https://app.gettelly.com/${user.profileId}`;
   card.note = "Save this contact!";
 
