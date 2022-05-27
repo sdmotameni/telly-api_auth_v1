@@ -1,3 +1,5 @@
+This version uses the email/pass login method.
+
 # Endpoints
 
 - Get Profile by ID (GET: /profile/:id)
