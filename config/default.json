@@ -1,5 +1,5 @@
 {
-  "mongoRoute": "mongodb+srv://dblogin:AnLpeMaSYgU0ubRO@cluster0.akosg.mongodb.net/main?retryWrites=true&w=majority",
+  "mongoRoute": "mongodb+srv://dblogin:AnLpeMaSYgU0ubRO@cluster0.akosg.mongodb.net/v2dev?retryWrites=true&w=majority",
   "jwtPrivateKey": "xsSd0Ss022lD",
   "cloudinary": {
     "cloud_name": "dyusynvjw",

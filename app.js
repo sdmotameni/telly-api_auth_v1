@@ -14,5 +14,5 @@ require("./utils/errorLogger").init();
 require("./startup/prod")(app);
 require("./startup/routes")(app);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Service started on port ${port}.`));
